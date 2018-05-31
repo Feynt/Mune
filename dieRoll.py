@@ -13,13 +13,12 @@ def isInt(s):
         return False
 
 def rollDie(dieCmd):
-    print('Received string: {}'.format(dieCmd))
-    if isInt(dieCmd):
-        return [int(dieCmd)]
-    m = re.match(r"(\d+)d(\d+)(.+)?",re.sub(r'^[\+\s]*','',dieCmd))
+    dieStr = re.sub('\s', '', dieCmd)
+    #print('Received string: [{}]'.format(dieStr.lstrip('\+')))
+    m = re.match(r"(\d+)d(\d+)(.+)?",dieStr.lstrip('\+'))
     if m is not None:
         diceResults = []
-        ##print('len(groups()): {}'.format(len(m.groups())))
+        #print('len(groups()): {}'.format(len(m.groups())))
         #for u in m.groups():
             #print('m:{}'.format(u))
         for x in range(int(m.group(1))):
@@ -29,11 +28,12 @@ def rollDie(dieCmd):
             #print('Recursive rollDie({})'.format(m.group(3)))
             if m.group(3) is not None:
                 newResults = rollDie(m.group(3))
+                #print('m.group[3]({}) - newResults[{}]'.format(m.group(3),newResults))
                 for num in newResults:
                     diceResults.append(num)
         return diceResults
     else:
-        m = re.match(r"(\d+)(.+)?", re.sub(r'^[\+\s]*','',dieCmd))
+        m = re.match(r"([\-\d]+)(.+)?", dieStr.lstrip('\s\+'))
         if m is not None:
             diceResults = []
             diceResults.append(int(m.group(1)))
@@ -46,11 +46,15 @@ def rollDie(dieCmd):
                         diceResults.append(int(num))
             return diceResults
 
-dieRoll = "3d6+1d4+9+3d8"
-total = 0;
-dieResults = rollDie(dieRoll)
-for die in dieResults:
-    #print('die:{}'.format(die))
-    total += die
+def roll(dieCmd):
+    total = 0
+    dieResults = rollDie(dieCmd)
+    for die in dieResults:
+        #print('die:{}'.format(die))
+        total += die
+    print("Rolled {}, got {} ({})".format(dieCmd, total, dieResults))
 
-print("Rolled {}, got {} ({})".format(dieRoll, total, dieResults))
+roll("3d6 + 1d4 - 9 +3d8")
+roll("8d6+6")
+roll("1d3+1d4+1d5-6")
+

@@ -1,16 +1,5 @@
-
 import random
 import re
-from discord.ext.commands import Bot
-
-def isInt(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
-    except TypeError:
-        return False
 
 def rollDie(dieCmd):
     dieStr = re.sub('\s', '', dieCmd)
@@ -46,15 +35,16 @@ def rollDie(dieCmd):
                         diceResults.append(int(num))
             return diceResults
 
-def roll(dieCmd):
+def totalRoll(dieCmd):
     total = 0
     dieResults = rollDie(dieCmd)
     for die in dieResults:
         #print('die:{}'.format(die))
         total += die
-    print("Rolled {}, got {} ({})".format(dieCmd, total, dieResults))
+    #print("Rolled {}, got {} ({})".format(dieCmd, total, dieResults))
+    dieResults.append(total)
+    return dieResults
 
-roll("3d6 + 1d4 - 9 +3d8")
-roll("8d6+6")
-roll("1d3+1d4+1d5-6")
-
+#roll("3d6 + 1d4 - 9 +3d8")
+#roll("8d6+6")
+#roll("1d3+1d4+1d5-6")

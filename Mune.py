@@ -46,13 +46,8 @@ def rollDie(dieCmd):
         pass_context=True)
 async def roll_dice(context):
     cmdLine = context.message.content[2:]
-    cmds = re.findall(r"[\w\d]+", cmdLine)
-    parsedCmds = []
-    for cmd in cmds:
-        print('cmd: {}'.format(cmd))
-        parsedCmds.append(str(rollDie(cmd)))
-
-    output = 'Got message: {} - Total groups: {} - {}'.format(context.message.content, len(cmds), parsedCmds)
+    dieResults = roll(cmdLine)
+    output = 'Results: {} (Total: {})'.format(dieResults[:-1],dieResults[-1:])
     print(output)
     await client.say(context.message.author.mention + ' - ' + output)
 
